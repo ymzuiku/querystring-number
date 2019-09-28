@@ -1,50 +1,55 @@
+const rollup = require('rollup');
 const rollupTypescript = require('rollup-plugin-typescript2');
 const { uglify } = require('rollup-plugin-uglify');
-const path = require('path');
-const fs = require('fs');
-const pwd = (...args) => path.resolve(process.cwd(), ...args);
-
-function rm(file) {
-  const stat = fs.statSync(file);
-  if (stat) {
-    if (stat.isDirectory()) {
-      fs.rmdirSync(file);
-    } else if (stat.isFile()) {
-      fs.unlinkSync(file);
-    }
-  }
-}
+const { resolve } = require('path');
+const pwd = (...args) => resolve(process.cwd(), ...args);
+const fs = require('fs-extra');
 
 function clearDir(dir) {
-  if (fs.existsSync(pwd(dir))) {
-    const files = fs.readdirSync(pwd(dir));
+  if (fs.existsSync(dir)) {
+    const files = fs.readdirSync(dir);
     files.forEach(file => {
-      rm(pwd(dir, file));
+      fs.remove(`${dir}/${file}`);
     });
   }
 }
 
-clearDir('umd');
+clearDir(pwd('umd'));
 
-module.exports = [
-  {
-    input: './lib/index.ts',
-    output: {
-      file: './umd/index.js',
-      format: 'umd',
-      name: 'queryString',
-      sourcemap: true,
-      globals: {
-        react: 'React',
-      },
+const watchOptions = {
+  input: './lib/index.ts',
+  output: {
+    file: './umd/index.js',
+    format: 'umd',
+    name: 'queryString',
+    sourcemap: true,
+    globals: {
+      react: 'React',
     },
-    plugins: [
-      rollupTypescript({
-        useTsconfigDeclarationDir: false,
-      }),
-      uglify({
-        sourcemap: true,
-      }),
-    ],
   },
-];
+  plugins: [
+    rollupTypescript({
+      useTsconfigDeclarationDir: false,
+    }),
+    uglify({
+      sourcemap: true,
+    }),
+  ],
+};
+const watcher = rollup.watch(watchOptions);
+
+// event.code can be one of:
+//   START        — the watcher is (re)starting
+//   BUNDLE_START — building an individual bundle
+//   BUNDLE_END   — finished building a bundle
+//   END          — finished building all bundles
+//   ERROR        — encountered an error while bundling
+//   FATAL        — encountered an unrecoverable error
+watcher.on('event', event => {
+  if (event.code === 'BUNDLE_END') {
+    console.log(event);
+  }
+  if (event.code === 'END') {
+    watcher.close();
+  }
+});
