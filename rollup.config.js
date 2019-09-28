@@ -7,7 +7,7 @@ module.exports = [
     output: {
       file: './umd/index.umd.js',
       format: 'umd',
-      name: 'mula',
+      name: 'queryString',
       sourcemap: true,
       globals: {
         react: 'React',

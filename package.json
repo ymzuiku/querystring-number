@@ -1,6 +1,6 @@
 {
   "name": "querystring-number",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "umd/index.js",
   "types": "lib/index.ts",
   "files": [

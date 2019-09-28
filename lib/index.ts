@@ -81,9 +81,11 @@ export function stringify(obj: any, prefix: string = '') {
   return pairs.length ? prefix + pairs.join('&') : '';
 }
 
-export default {
+const queryString = {
   parse,
   stringify,
   decode,
   encode,
 };
+
+export default queryString;
