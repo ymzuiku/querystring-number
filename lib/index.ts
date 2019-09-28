@@ -1,4 +1,4 @@
-function decode(input: string) {
+export function decode(input: string) {
   try {
     return decodeURIComponent(input.replace(/\+/g, ' '));
   } catch (e) {
@@ -6,13 +6,13 @@ function decode(input: string) {
   }
 }
 
-// function encode(input: string) {
-//   try {
-//     return encodeURIComponent(input);
-//   } catch (e) {
-//     return null;
-//   }
-// }
+export function encode(input: string) {
+  try {
+    return encodeURIComponent(input);
+  } catch (e) {
+    return null;
+  }
+}
 
 export function parse(query?: string, withoutNumber?: boolean) {
   if (!query) {
@@ -43,8 +43,8 @@ export function parse(query?: string, withoutNumber?: boolean) {
 
 export function stringify(obj: any, prefix: string = '') {
   const pairs = [];
-  let value:any;
-  let key:any;
+  let value: any;
+  let key: any;
 
   //
   // Optionally prefix with a '?' if needed
@@ -80,3 +80,10 @@ export function stringify(obj: any, prefix: string = '') {
 
   return pairs.length ? prefix + pairs.join('&') : '';
 }
+
+export default {
+  parse,
+  stringify,
+  decode,
+  encode,
+};
