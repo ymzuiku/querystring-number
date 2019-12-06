@@ -1,6 +1,6 @@
 export function decode(input: string) {
   try {
-    return decodeURIComponent(input.replace(/\+/g, ' '));
+    return decodeURIComponent(input.replace(/\+/g, " "));
   } catch (e) {
     return null;
   }
@@ -26,22 +26,25 @@ export function parse(query?: string, withoutNumber?: boolean) {
   // tslint:disable-next-line
   while ((part = parser.exec(query))) {
     const key = decode(part[1]);
-    let value: any = decode(part[2]);
+    const value: any = decode(part[2]);
 
     if (key === null || value === null || key in result) {
       continue;
     }
-    if (!withoutNumber) {
-      value = isNaN(Number(value)) ? value : Number(value);
-    }
+    if (!withoutNumber && typeof value === "string") {
+      const num = Number(value);
+      const numberValue = isNaN(num) ? value : num;
 
-    result[key] = value;
+      result[key] = value == numberValue.toString() ? numberValue : value;
+    } else {
+      result[key] = value;
+    }
   }
 
   return result;
 }
 
-export function stringify(obj: any, prefix: string = '') {
+export function stringify(obj: any, prefix: string = "") {
   const pairs = [];
   let value: any;
   let key: any;
@@ -49,8 +52,8 @@ export function stringify(obj: any, prefix: string = '') {
   //
   // Optionally prefix with a '?' if needed
   //
-  if (typeof prefix !== 'string') {
-    prefix = '?';
+  if (typeof prefix !== "string") {
+    prefix = "?";
   }
 
   for (key in obj) {
@@ -61,7 +64,7 @@ export function stringify(obj: any, prefix: string = '') {
       // string instead of the stringified value.
       //
       if (!value && (value === null || value === undefined || isNaN(value))) {
-        value = '';
+        value = "";
       }
 
       key = encodeURIComponent(key);
@@ -78,14 +81,14 @@ export function stringify(obj: any, prefix: string = '') {
     }
   }
 
-  return pairs.length ? prefix + pairs.join('&') : '';
+  return pairs.length ? prefix + pairs.join("&") : "";
 }
 
 const queryString = {
   parse,
   stringify,
   decode,
-  encode,
+  encode
 };
 
 export default queryString;
