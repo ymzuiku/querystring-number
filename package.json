@@ -1,26 +1,20 @@
 {
   "name": "querystring-number",
-  "version": "1.0.8",
-  "main": "umd/index.js",
-  "types": "umd/index.d.ts",
+  "version": "1.0.9",
+  "main": "es/index.js",
+  "types": "lib/index.ts",
   "files": [
-    "umd"
+    "es"
   ],
   "license": "MIT",
   "scripts": {
-    "lib": "node rollup.config.js"
+    "es": "esbuild --define:process.env.NODE_ENV=\\\"production\\\" lib/index.ts --outdir=es --target=es6  --bundle --external:querystring-number --format=esm --minify --splitting"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/ymzuiku/querystring-number"
   },
   "devDependencies": {
-    "@types/fs-extra": "^8.0.0",
-    "fs-extra": "^8.1.0",
-    "rollup": "^1.21.4",
-    "rollup-plugin-typescript2": "^0.24.3",
-    "rollup-plugin-uglify": "^6.0.3",
-    "tscu": "^1.3.2",
     "typescript": "3.5.2"
   }
 }
