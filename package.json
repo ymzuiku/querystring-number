@@ -1,14 +1,15 @@
 {
   "name": "querystring-number",
-  "version": "1.0.9",
-  "main": "es/index.js",
+  "version": "1.1.1",
+  "main": "cjs/index.js",
   "types": "lib/index.ts",
   "files": [
-    "es"
+    "cjs",
+    "lib"
   ],
   "license": "MIT",
   "scripts": {
-    "es": "esbuild --define:process.env.NODE_ENV=\\\"production\\\" lib/index.ts --outdir=es --target=es6  --bundle --external:querystring-number --format=esm --minify --splitting"
+    "build": "esbuild --define:process.env.NODE_ENV=\\\"production\\\" lib/index.ts --outdir=cjs --target=es6  --bundle --external:querystring-number --format=cjs --minify"
   },
   "repository": {
     "type": "git",
